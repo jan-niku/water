@@ -1,5 +1,8 @@
 % A linear approximation for water flow in a tank
-format short g
+% a simple approach to the problem proposed in
+% https://www.comap.com/undergraduate/contests/matrix/PDF/1991/1991B.pdf
+
+format short g % nice round values
 
 % time values from table 1
 % all in seconds
@@ -77,6 +80,7 @@ end
 % keep in mind these are the SUM of two functions:
 % the pump function and the drain function
 % we need to account for this still!
+drainrate = mean(deltaVavgs);
 
 % first pump:
 % note: these values are averages between last valid measurement
@@ -88,7 +92,7 @@ tpump1 = 39384 - 34108;
 % as the pump stopped halfway between the first valid measurement
 % and the pump on non-measurement, we add as draining which would have 
 % occured
-vchange1 = 3550 -drainrate*(39435-39332)/2 - 2697;
+vchange1 = 3550 - (2697 + drainrate*(35932-32284)/2);
 delVpump(1) = vchange1/tpump1;
 
 % second pump
@@ -102,7 +106,6 @@ bothrate = mean(delVpump); % this is 0.095177
 
 % assuming both linear, we can account for drainage rate to find
 % the 'true' linear pump rate
-drainrate = mean(deltaVavgs);
 pumprate = mean(delVpump) - drainrate;
 
 % find our filling rate (with draining, so both rates combined)
