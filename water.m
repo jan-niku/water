@@ -1,5 +1,8 @@
-% some stuff for water project
-format short g
+% A linear approximation for water flow in a tank
+% a simple approach to the problem proposed in
+% https://www.comap.com/undergraduate/contests/matrix/PDF/1991/1991B.pdf
+
+format short g % nice round values
 
 % time values from table 1
 % all in seconds
@@ -51,6 +54,8 @@ deltaVmod = []; % an empty holder array
 deltaTmod = []; % holds the good delta T's
 
 % populate delV
+% TODO confirm we arent artificially elevating the slope of the
+% TODO filling function by having positive values in here 
 for i = 1:length(deltaV)
     if high > deltaV(i)
         if low < deltaV(i)
@@ -75,15 +80,25 @@ end
 % keep in mind these are the SUM of two functions:
 % the pump function and the drain function
 % we need to account for this still!
+drainrate = mean(deltaVavgs);
 
 % first pump:
-tpump1 = 39435 - 32284;
-vchange1 = 3550 - 2697; % are we taking one too many
+% note: these values are averages between last valid measurement
+% and when the pump was seen on
+% TODO: TRIPLE CHECK AN AVERAGE MAKES SENSE HERE
+% TODO: IS IT EASIER TO JUST EXTRAPOLATE LINEARLY WHEN IT SHOULD TURN ON?
+tpump1 = 39384 - 34108;
+
+% as the pump stopped halfway between the first valid measurement
+% and the pump on non-measurement, we add as draining which would have 
+% occured
+vchange1 = 3550 - (2697 + drainrate*(35932-32284)/2);
 delVpump(1) = vchange1/tpump1;
 
 % second pump
-tpump2 = 85968 - 75021;
-vchange2 = 3475 - 2697;
+% similarly as above, see notes and todo's
+tpump2 = 84309 - 77138; % averages between points
+vchange2 = 3475 - drainrate*(85968-82649)/2 - 2697;
 delVpump(2) = vchange2/tpump2;
 
 % this is the mean of pump dels
@@ -91,7 +106,6 @@ bothrate = mean(delVpump); % this is 0.095177
 
 % assuming both linear, we can account for drainage rate to find
 % the 'true' linear pump rate
-drainrate = mean(deltaVavgs);
 pumprate = mean(delVpump) - drainrate;
 
 % find our filling rate (with draining, so both rates combined)
