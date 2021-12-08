@@ -29,7 +29,7 @@ l = [3175, 3110, 3054,...
      3340];
 
 % plot the raw data
-plot(t,l)
+% plot(t,l)
 
 % create a plot of delta volume per hour
 deltaV = zeros(1, 28);
@@ -39,10 +39,9 @@ for i = 2:28
 end
 
 % plot the deltaV
-%plot(t, deltaV)
-
+% plot(t, deltaV)
 % print a summary table
-table(t',l',deltaV')
+% table(n',t',l',deltaV')
 
 % find an average of the sensible deltaV's
 good = 0; % holds the sensible values
@@ -51,7 +50,7 @@ high = 0; % ignore changes above this
 deltaVmod = []; % an empty holder array
 deltaTmod = []; % holds the good delta T's
 
-%populate deltaV
+% populate delV
 for i = 1:length(deltaV)
     if high > deltaV(i)
         if low < deltaV(i)
@@ -70,22 +69,33 @@ end
 
 % this is the mean of delta v per second over good values
 % mean(deltaVavgs) % -0.019532
-% we want to treat this as slope of one section
+% this is only good for pump off
 
+% we find these two slopes directly:
+% keep in mind these are the SUM of two functions:
+% the pump function and the drain function
+% we need to account for this still!
 
-% TODO: find the fill rate similarly
+% first pump:
+tpump1 = 39435 - 32284;
+vchange1 = 3550 - 2697; % are we taking one too many
+delVpump(1) = vchange1/tpump1;
 
-% TODO: create a single period by averaging around similar values
+% second pump
+tpump2 = 85968 - 75021;
+vchange2 = 3475 - 2697;
+delVpump(2) = vchange2/tpump2;
 
-% TODO: fourier series periodic extension type deal
+% this is the mean of pump dels
+bothrate = mean(delVpump); % this is 0.095177
 
-%function [time, levels] = model(times, startLev)
-% MODELLING STUFF HERE
-%end
+% assuming both linear, we can account for drainage rate to find
+% the 'true' linear pump rate
+drainrate = mean(deltaVavgs);
+pumprate = mean(delVpump) - drainrate;
 
-
-
-
+% find our filling rate (with draining, so both rates combined)
+time2fill = (3550-2700)/bothrate;
 
 
 

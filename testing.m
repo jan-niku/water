@@ -13,5 +13,4 @@ for i = 1:40
     (1/11) - total        
     end
 
-
 end
