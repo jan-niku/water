@@ -1,5 +1,7 @@
 % this is a driver script for the water modeling project
 
+% populate workspace first
+
 % get a linear approximation of flow
 % matching parameters of the given data
 lin_approx = lin_mod(93300, 3175, drainrate, bothrate, 1);

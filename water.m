@@ -79,13 +79,22 @@ end
 % we need to account for this still!
 
 % first pump:
-tpump1 = 39435 - 32284;
-vchange1 = 3550 - 2697; % are we taking one too many
+% note: these values are averages between last valid measurement
+% and when the pump was seen on
+% TODO: TRIPLE CHECK AN AVERAGE MAKES SENSE HERE
+% TODO: IS IT EASIER TO JUST EXTRAPOLATE LINEARLY WHEN IT SHOULD TURN ON?
+tpump1 = 39384 - 34108;
+
+% as the pump stopped halfway between the first valid measurement
+% and the pump on non-measurement, we add as draining which would have 
+% occured
+vchange1 = 3550 -drainrate*(39435-39332)/2 - 2697;
 delVpump(1) = vchange1/tpump1;
 
 % second pump
-tpump2 = 85968 - 75021;
-vchange2 = 3475 - 2697;
+% similarly as above, see notes and todo's
+tpump2 = 84309 - 77138; % averages between points
+vchange2 = 3475 - drainrate*(85968-82649)/2 - 2697;
 delVpump(2) = vchange2/tpump2;
 
 % this is the mean of pump dels
