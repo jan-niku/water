@@ -1,4 +1,4 @@
-% some stuff for water project
+% A linear approximation for water flow in a tank
 format short g
 
 % time values from table 1
@@ -51,6 +51,8 @@ deltaVmod = []; % an empty holder array
 deltaTmod = []; % holds the good delta T's
 
 % populate delV
+% TODO confirm we arent artificially elevating the slope of the
+% TODO filling function by having positive values in here 
 for i = 1:length(deltaV)
     if high > deltaV(i)
         if low < deltaV(i)
