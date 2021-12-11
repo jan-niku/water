@@ -4,15 +4,26 @@ scatter(Time, Level)
 
 x = linspace(0,50)
 
+levels = @(t) exp(-0.035*(heaviside(45-t)-heaviside(27-t)).*(t-27)) + exp(-(heaviside(27-t).*t*0.025));
+flow = @(t) -0.035*(heaviside(45-t)-heaviside(27-t)).*exp(-0.035*(heaviside(45-t)-heaviside(27-t)).*(t-27))+(-0.025)*heaviside(27-t).*exp(-(heaviside(27-t).*t*0.025));
+plot(x,levels(x))
+figure;
+plot(x,flow(x))
+
 %definitely needs some refinement - wondering if we need to somehow feed in
 %time to this...
 %funct1 has the right shape, just want it to be periodic
 
-funct = @(x) (heaviside(35-x)).*cos(x);
-funct1 = @(x) (heaviside(35-x)-heaviside(27-x)).*exp(-x)*2*10^(12);
-plot(x, funct(x)+funct1(x))
-figure;
-plot(x, funct1(x))
+% funct = @(t) (heaviside(35-t)).*cos(t);
+% funct = @(t) (heaviside(35-t)).*exp(0.5*t);
+% funct1 = @(t) (heaviside(50-t)-heaviside(27-t)).*exp(-0.25*t) + (1-(heaviside(50-t)-heaviside(27-t))).*exp(0.1*t);
+% plot(x, funct(x).*funct1(x))
+% figure;
+% plot(x, funct1(x))
+% 
+% funct2 = @(t) sin(0.5*t).*cos(t).*exp(-t/5);
+% figure;
+% plot(x,funct2(x))
 
 % xprime = @(x,y) a*x-b*x*y;
 % yprime = @(x,y) h*x*y-k*y;
