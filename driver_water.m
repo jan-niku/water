@@ -9,8 +9,13 @@ lin_approx = lin_mod(93300, 3175, drainrate, bothrate, 1);
 % plot both against each other
 plot(lin_approx);
 hold on
-plot(t,l);
+plot(t,l,'o');
 hold off
+title('Linear Approximation vs. Provided Data')
+xlabel('Time since First Measurement (seconds)')
+ylabel('Water Height (0.01 ft)')
+legend('Model','Given Data','Location','northwest')
+figure()
 
 % TODO: approximate total usage linearly
 %sec_in_day = 60 * 60 * 24;
@@ -36,3 +41,24 @@ for t_index = 2:length(t)
         errors(end+1) = lin_approx(time) - level;
     end
 end
+avgerr = nanmean(errors);
+
+plot(errors,'o')
+set(gca,'xtick',[])
+hold on
+%plot(nanmean(errors)*ones(length(errors),1))
+yline(avgerr, '-', ['Mean Error=16'], 'color', 'red')
+hold off
+title('Model Error')
+ylabel('Relative Error')
+legend('Relative Error','Mean Error','Location','northeast')
+figure()
+
+
+plot(t,deltaV, 'o')
+hold on
+yline(nanmean(deltaV),'-', ['Average Height Change'], 'color', 'red')
+set(gca,'xtick',[])
+ylabel('Change in Height (0.01 feet)')
+title('Variability in Usage Rates')
+hold off
